@@ -1,7 +1,8 @@
 name: jar
 description: "Elegant Schema Validation for Flutter and Dart"
 version: 1.0.0
-homepage:
+repository: https://github.com/julianramireze/jar
+homepage: https://github.com/julianramireze/jar
 
 environment:
   sdk: ^3.5.2
