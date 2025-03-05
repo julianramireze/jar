@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jar/jar.dart';
 
@@ -21,7 +22,9 @@ void main() {
       stopwatch.stop();
 
       expect(result.isValid, true);
-      print('Validar 100 campos tomó: ${stopwatch.elapsedMilliseconds}ms');
+      if (kDebugMode) {
+        print('Validating 100 fields took: ${stopwatch.elapsedMilliseconds}ms');
+      }
     });
 
     test('Deeply nested object validation', () {
@@ -49,11 +52,11 @@ void main() {
       final result = innerSchema.validate(innerData);
       stopwatch.stop();
 
-      print(result.error);
-
       expect(result.isValid, true);
-      print(
-          'Validar objeto anidado a 10 niveles tomó: ${stopwatch.elapsedMilliseconds}ms');
+      if (kDebugMode) {
+        print(
+            'Validating a 10-level nested object took: ${stopwatch.elapsedMilliseconds}ms');
+      }
     });
   });
 }

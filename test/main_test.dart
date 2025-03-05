@@ -365,8 +365,8 @@ void main() {
     test('future validation', () {
       final schema = Jar.date().future('Must be in the future');
       final now = DateTime.now();
-      final yesterday = now.subtract(Duration(days: 1));
-      final tomorrow = now.add(Duration(days: 1));
+      final yesterday = now.subtract(const Duration(days: 1));
+      final tomorrow = now.add(const Duration(days: 1));
 
       expect(schema.validate(yesterday).isValid, false);
       expect(schema.validate(tomorrow).isValid, true);
@@ -377,8 +377,8 @@ void main() {
     test('past validation', () {
       final schema = Jar.date().past('Must be in the past');
       final now = DateTime.now();
-      final yesterday = now.subtract(Duration(days: 1));
-      final tomorrow = now.add(Duration(days: 1));
+      final yesterday = now.subtract(const Duration(days: 1));
+      final tomorrow = now.add(const Duration(days: 1));
 
       expect(schema.validate(yesterday).isValid, true);
       expect(schema.validate(tomorrow).isValid, false);

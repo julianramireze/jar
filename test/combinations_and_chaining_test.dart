@@ -15,8 +15,6 @@ void main() {
       const email = 'valid.email@example.com';
       final emailResult = schema.validate(email);
 
-      print('Email length: ${email.length}, min required: 30');
-
       expect(emailResult.isValid, false);
       expect(emailResult.error, 'Length error');
 
@@ -39,7 +37,7 @@ void main() {
 
   group('Error message formatting', () {
     test('Custom dynamic error messages', () {
-      final customMessage = (int min) =>
+      customMessage(int min) =>
           (value) => 'Value "$value" must be at least $min characters';
 
       final schema = Jar.string().addValidator(
