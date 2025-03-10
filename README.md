@@ -262,6 +262,6 @@ JAR is available under the MIT License.
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Credits
+## Contributors
 
-JAR is developed and maintained by [Julian Ramirez](https://github.com/julianramireze).
+[Julian Ramirez](https://github.com/julianramireze)
