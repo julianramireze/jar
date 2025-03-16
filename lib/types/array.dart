@@ -1,3 +1,4 @@
+import 'package:jar/jar.dart';
 import 'package:jar/result.dart';
 import 'package:jar/schema.dart';
 
@@ -98,6 +99,15 @@ class JarArray<T> extends JarSchema<List<T>, JarArray<T>> {
         }
       }
       return null;
+    });
+  }
+
+  JarArray<T> custom(String? Function(List<T>? value) validator,
+      [String? message]) {
+    return addValidator((value) {
+      if (value == null) return null;
+      final validationResult = validator(value);
+      return validationResult ?? null;
     });
   }
 }

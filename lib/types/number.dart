@@ -1,3 +1,4 @@
+import 'package:jar/jar.dart';
 import 'package:jar/schema.dart';
 
 class JarNumber extends JarSchema<num, JarNumber> {
@@ -59,8 +60,8 @@ class JarNumber extends JarSchema<num, JarNumber> {
   }
 
   @override
-  JarNumber when(String field,
-      Map<dynamic, JarNumber Function(JarNumber)> conditions) {
+  JarNumber when(
+      String field, Map<dynamic, JarNumber Function(JarNumber)> conditions) {
     super.when(field, conditions);
     return self;
   }
@@ -73,6 +74,14 @@ class JarNumber extends JarSchema<num, JarNumber> {
       return value == otherValue
           ? null
           : (message ?? 'Must be equal to $field');
+    });
+  }
+
+  JarNumber custom(String? Function(num? value) validator, [String? message]) {
+    return addValidator((value) {
+      if (value == null) return null;
+      final validationResult = validator(value);
+      return validationResult ?? null;
     });
   }
 }

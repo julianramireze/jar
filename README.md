@@ -12,6 +12,7 @@ JAR is a powerful, flexible, and intuitive schema validation library for Flutter
 - 🔄 **Conditional validation** with `.when()` for dynamic requirements
 - 🌐 **Complex object validation** with nested schemas and custom error messages
 - 🧩 **Schema composition** with `.merge()` for multi-step form validation
+- 🛠️ **Custom validation** with `.custom()` for specialized validation logic
 - 📱 **Flutter-friendly** for seamless form validation in your apps
 - 🪶 **Lightweight** with zero external dependencies
 
@@ -85,6 +86,7 @@ final passwordSchema = Jar.string()
 - `.email([String? message])` - Validates email format
 - `.equalTo(String field, [String? message])` - Ensures the value equals another field's value
 - `.oneOf(List<String> allowedValues, [String? message])` - Ensures the value is one of the allowed values
+- `.custom(String? Function(String? value) validator)` - Applies a custom validation function
 - `.when(String field, Map<dynamic, JarString Function(JarString)> conditions)` - Applies conditional validation based on another field's value
 
 ### Number Validation
@@ -108,6 +110,7 @@ final ageSchema = Jar.number()
 - `.round()` - Transforms the value by rounding to the nearest integer
 - `.truncate()` - Transforms the value by removing decimal places
 - `.equalTo(String field, [String? message])` - Ensures the value equals another field's value
+- `.custom(String? Function(num? value) validator)` - Applies a custom validation function
 - `.when(String field, Map<dynamic, JarNumber Function(JarNumber)> conditions)` - Applies conditional validation based on another field's value
 
 ### Boolean Validation
@@ -125,6 +128,7 @@ final termsSchema = Jar.boolean()
 - `.isTrue([String? message])` - Ensures the value is true
 - `.isFalse([String? message])` - Ensures the value is false
 - `.equalTo(String field, [String? message])` - Ensures the value equals another field's value
+- `.custom(String? Function(bool? value) validator)` - Applies a custom validation function
 - `.when(String field, Map<dynamic, JarBoolean Function(JarBoolean)> conditions)` - Applies conditional validation based on another field's value
 
 ### Date Validation
@@ -148,6 +152,7 @@ final meetingSchema = Jar.date()
 - `.future([String? message])` - Ensures the date is in the future (after now)
 - `.past([String? message])` - Ensures the date is in the past (before now)
 - `.equalTo(String field, [String? message])` - Ensures the value equals another field's value
+- `.custom(String? Function(DateTime? value) validator)` - Applies a custom validation function
 - `.when(String field, Map<dynamic, JarDate Function(JarDate)> conditions)` - Applies conditional validation based on another field's value
 
 ### Array Validation
@@ -167,6 +172,7 @@ final skillsSchema = Jar.array(Jar.string())
 - `.length(int exactLength, [String? message])` - Ensures exact array length
 - `.unique([String? message])` - Ensures all array elements are unique
 - `.equalTo(String field, [String? message])` - Ensures the array equals another field's array
+- `.custom(String? Function(List<T>? value) validator)` - Applies a custom validation function
 - `.when(String field, Map<dynamic, JarArray<T> Function(JarArray<T>)> conditions)` - Applies conditional validation based on another field's value
 
 ### Object Validation
@@ -196,6 +202,7 @@ final addressSchema = Jar.object({
 - `.pick(List<String> fieldNames)` - Creates a new schema with only the specified fields
 - `.omit(List<String> fieldNames)` - Creates a new schema without the specified fields
 - `.equalTo(String field, [String? message])` - Ensures the object equals another field's object
+- `.custom(String? Function(Map<String, dynamic>? value) validator)` - Applies a custom validation function
 - `.when(String field, Map<dynamic, JarObject Function(JarObject)> conditions)` - Applies conditional validation based on another field's value
 
 ### Mixed Type Validation
@@ -213,7 +220,32 @@ final mixedSchema = Jar.mixed<dynamic>()
 - `.oneOf(List<T> allowed, [String? message])` - Ensures the value is one of the allowed values
 - `.notOneOf(List<T> forbiddenValues, [String? message])` - Ensures the value is not one of the forbidden values
 - `.equalTo(String field, [String? message])` - Ensures the value equals another field's value
+- `.custom(String? Function(T? value) validator)` - Applies a custom validation function
 - `.when(String field, Map<dynamic, JarMixed<T> Function(JarMixed<T>)> conditions)` - Applies conditional validation based on another field's value
+
+### Custom Validation
+
+JAR allows you to define your own validation logic with the `.custom()` method:
+
+```dart
+final passwordSchema = Jar.string().custom(
+  (value) {
+    if (value == null || value.isEmpty) return 'Password is required';
+    
+    final hasUppercase = RegExp(r'[A-Z]').hasMatch(value);
+    final hasLowercase = RegExp(r'[a-z]').hasMatch(value);
+    final hasDigit = RegExp(r'[0-9]').hasMatch(value);
+    final hasSpecialChar = RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
+    
+    if (!hasUppercase) return 'Password must include at least one uppercase letter';
+    if (!hasLowercase) return 'Password must include at least one lowercase letter';
+    if (!hasDigit) return 'Password must include at least one digit';
+    if (!hasSpecialChar) return 'Password must include at least one special character';
+    
+    return null;
+  },
+);
+```
 
 ### Conditional Validation
 

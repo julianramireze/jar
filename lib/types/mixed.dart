@@ -1,3 +1,4 @@
+import 'package:jar/jar.dart';
 import 'package:jar/schema.dart';
 
 class JarMixed<T> extends JarSchema<T, JarMixed<T>> {
@@ -43,6 +44,14 @@ class JarMixed<T> extends JarSchema<T, JarMixed<T>> {
       return value == otherValue
           ? null
           : (message ?? 'Must be equal to $field');
+    });
+  }
+
+  JarMixed<T> custom(String? Function(T? value) validator, [String? message]) {
+    return addValidator((value) {
+      if (value == null) return null;
+      final validationResult = validator(value);
+      return validationResult ?? null;
     });
   }
 }

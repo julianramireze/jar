@@ -1,3 +1,4 @@
+import 'package:jar/jar.dart';
 import 'package:jar/result.dart';
 import 'package:jar/schema.dart';
 
@@ -268,5 +269,14 @@ class JarObject extends JarSchema<Map<String, dynamic>, JarObject> {
     }
 
     return true;
+  }
+
+  JarObject custom(String? Function(Map<String, dynamic>? value) validator,
+      [String? message]) {
+    return addValidator((value) {
+      if (value == null) return null;
+      final validationResult = validator(value);
+      return validationResult ?? null;
+    });
   }
 }

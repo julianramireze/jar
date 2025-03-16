@@ -15,6 +15,17 @@ void main() {
       expect(schema.validate('').error, 'Field is required');
     });
 
+    test('custom validation', () {
+      final schema = Jar.string().custom(
+        (value) => value!.length % 2 == 0 ? null : 'String length must be even',
+      );
+
+      expect(schema.validate('ab').isValid, true);
+      expect(schema.validate('abcd').isValid, true);
+      expect(schema.validate('abc').isValid, false);
+      expect(schema.validate('abc').error, 'String length must be even');
+    });
+
     test('min validation', () {
       final schema = Jar.string().min(3, 'Too short');
 

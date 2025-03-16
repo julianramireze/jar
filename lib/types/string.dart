@@ -1,3 +1,4 @@
+import 'package:jar/jar.dart';
 import 'package:jar/schema.dart';
 
 class JarString extends JarSchema<String, JarString> {
@@ -77,6 +78,15 @@ class JarString extends JarSchema<String, JarString> {
       return allowedValues.contains(value)
           ? null
           : (message ?? 'Value must be one of: ${allowedValues.join(", ")}');
+    });
+  }
+
+  JarString custom(String? Function(String? value) validator,
+      [String? message]) {
+    return addValidator((value) {
+      if (value == null) return null;
+      final validationResult = validator(value);
+      return validationResult ?? null;
     });
   }
 }

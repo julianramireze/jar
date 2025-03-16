@@ -1,3 +1,4 @@
+import 'package:jar/jar.dart';
 import 'package:jar/schema.dart';
 
 class JarBoolean extends JarSchema<bool, JarBoolean> {
@@ -40,6 +41,15 @@ class JarBoolean extends JarSchema<bool, JarBoolean> {
       return value == otherValue
           ? null
           : (message ?? 'Must be equal to $field');
+    });
+  }
+
+  JarBoolean custom(String? Function(bool? value) validator,
+      [String? message]) {
+    return addValidator((value) {
+      if (value == null) return null;
+      final validationResult = validator(value);
+      return validationResult ?? null;
     });
   }
 }
