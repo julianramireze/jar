@@ -55,16 +55,31 @@ class JarArray<T> extends JarSchema<List<T>, JarArray<T>> {
   }
 
   @override
-  JarResult validate(List<T>? value, [Map<String, dynamic>? allValues]) {
-    final listResult = super.validate(value, allValues);
+  JarResult validate(dynamic value, [Map<String, dynamic>? allValues]) {
+    if (value == null) {
+      return super.validate(null, allValues);
+    }
+
+    if (value is! List) {
+      return JarResult.error('Expected a list');
+    }
+
+    List<T>? typedList;
+    try {
+      typedList = List<T>.from(value);
+    } catch (e) {
+      return JarResult.error('Failed to convert list to required type');
+    }
+
+    final listResult = super.validate(typedList, allValues);
     if (!listResult.isValid) {
       return listResult;
     }
 
-    if (value != null && elementSchema != null) {
+    if (typedList.isNotEmpty && elementSchema != null) {
       final errors = <int, String>{};
-      for (var i = 0; i < value.length; i++) {
-        final elementResult = elementSchema!.validate(value[i], allValues);
+      for (var i = 0; i < typedList.length; i++) {
+        final elementResult = elementSchema!.validate(typedList[i], allValues);
         if (!elementResult.isValid) {
           errors[i] = elementResult.error!;
         }
