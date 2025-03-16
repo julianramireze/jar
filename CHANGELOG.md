@@ -2,6 +2,14 @@
 
 All notable changes to the JAR validation library will be documented in this file.
 
+## 1.1.1 - [2025-03-15]
+
+### Fixed
+- Improved type validation for arrays
+  - Enhanced type checking for array elements
+  - Fixed edge cases in array type validation
+  - Added more robust type inference for mixed-type arrays
+
 ## 1.1.0 - [2025-03-15]
 
 ### Added
