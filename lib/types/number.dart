@@ -77,10 +77,10 @@ class JarNumber extends JarSchema<num, JarNumber> {
     });
   }
 
-  JarNumber custom(String? Function(num? value) validator, [String? message]) {
+  JarNumber custom(String? Function(num? value, [Map<String, dynamic>? allValues]) validator, [String? message]) {
     return addValidator((value) {
       if (value == null) return null;
-      final validationResult = validator(value);
+      final validationResult = validator(value, getAllValues());
       return validationResult ?? null;
     });
   }

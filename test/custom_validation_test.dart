@@ -5,7 +5,7 @@ void main() {
   group('Custom validation tests', () {
     test('JarString custom validation', () {
       final schema = Jar.string().custom(
-        (value) =>
+        (value, [allValues]) =>
             value!.contains('@company.com') ? null : 'Must be a company email',
       );
 
@@ -17,7 +17,8 @@ void main() {
 
     test('JarNumber custom validation', () {
       final schema = Jar.number().custom(
-        (value) => value! % 2 == 0 ? null : 'Must be an even number',
+        (value, [allValues]) =>
+            value! % 2 == 0 ? null : 'Must be an even number',
       );
 
       expect(schema.validate(2).isValid, true);
@@ -31,7 +32,7 @@ void main() {
       final isEvenHour = currentHour % 2 == 0;
 
       final schema = Jar.boolean().custom(
-        (value) =>
+        (value, [allValues]) =>
             value == isEvenHour ? null : 'Must match current hour parity',
       );
 
@@ -43,7 +44,7 @@ void main() {
 
     test('JarDate custom validation', () {
       final schema = Jar.date().custom(
-        (value) => (value!.weekday == DateTime.saturday ||
+        (value, [allValues]) => (value!.weekday == DateTime.saturday ||
                 value.weekday == DateTime.sunday)
             ? null
             : 'Must be a weekend day',
@@ -59,7 +60,7 @@ void main() {
 
     test('JarArray custom validation', () {
       final schema = Jar.array<int>().custom(
-        (value) => value!.every((element) => element >= 0)
+        (value, [allValues]) => value!.every((element) => element >= 0)
             ? null
             : 'All elements must be non-negative',
       );
@@ -72,7 +73,7 @@ void main() {
 
     test('JarObject custom validation', () {
       final schema = Jar.object().custom(
-        (value) =>
+        (value, [allValues]) =>
             value!.keys.every((key) => (key as String).startsWith('user_'))
                 ? null
                 : 'All keys must start with user_',
@@ -102,7 +103,7 @@ void main() {
 
     test('JarMixed custom validation', () {
       final schema = Jar.mixed<dynamic>().custom(
-        (value) => (value is String || value is int)
+        (value, [allValues]) => (value is String || value is int)
             ? null
             : 'Value must be a string or an integer',
       );
@@ -118,7 +119,7 @@ void main() {
   group('Advanced custom validation scenarios', () {
     test('Custom password validation', () {
       final passwordSchema = Jar.string().custom(
-        (value) {
+        (value, [allValues]) {
           if (value == null || value.isEmpty) return 'Password is required';
 
           final hasUppercase = RegExp(r'[A-Z]').hasMatch(value);
@@ -148,7 +149,7 @@ void main() {
 
     test('Custom credit card validation', () {
       final ccSchema = Jar.string().custom(
-        (value) {
+        (value, [allValues]) {
           if (value == null || value.isEmpty)
             return 'Credit card number required';
 
@@ -173,16 +174,17 @@ void main() {
     test('Custom validation with multiple schemas', () {
       final formSchema = Jar.object({
         'username': Jar.string().custom(
-          (value) =>
+          (value, [allValues]) =>
               !value!.contains(' ') ? null : 'Username cannot contain spaces',
         ),
         'age': Jar.number().custom(
-          (value) => value! >= 18 && value <= 65
+          (value, [allValues]) => value! >= 18 && value <= 65
               ? null
               : 'Age must be between 18 and 65',
         ),
         'agreeToTerms': Jar.boolean().custom(
-          (value) => value == true ? null : 'You must agree to the terms',
+          (value, [allValues]) =>
+              value == true ? null : 'You must agree to the terms',
         ),
       });
 
@@ -206,12 +208,14 @@ void main() {
     });
 
     test('Combining built-in and custom validations', () {
-      final schema =
-          Jar.string().min(8, 'Too short').max(20, 'Too long').custom(
-                (value) => RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value!)
-                    ? null
-                    : 'Only alphanumeric characters and underscores allowed',
-              );
+      final schema = Jar.string()
+          .min(8, 'Too short')
+          .max(20, 'Too long')
+          .custom(
+            (value, [allValues]) => RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value!)
+                ? null
+                : 'Only alphanumeric characters and underscores allowed',
+          );
 
       expect(schema.validate('username_123').isValid, true);
       expect(schema.validate('ab').isValid, false);
@@ -228,7 +232,7 @@ void main() {
 
       schema.fields['businessName'] = Jar.string().when('accountType', {
         'business': (s) => s.required('Business name is required').custom(
-              (value) => value!.length >= 3 && value.length <= 50
+              (value, [allValues]) => value!.length >= 3 && value.length <= 50
                   ? null
                   : 'Business name must be between 3 and 50 characters',
             ),
@@ -237,7 +241,7 @@ void main() {
 
       schema.fields['taxId'] = Jar.string().when('accountType', {
         'business': (s) => s.required('Tax ID is required').custom(
-              (value) => RegExp(r'^\d{2}-\d{7}$').hasMatch(value!)
+              (value, [allValues]) => RegExp(r'^\d{2}-\d{7}$').hasMatch(value!)
                   ? null
                   : 'Tax ID must be in format XX-XXXXXXX',
             ),

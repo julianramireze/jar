@@ -47,10 +47,10 @@ class JarMixed<T> extends JarSchema<T, JarMixed<T>> {
     });
   }
 
-  JarMixed<T> custom(String? Function(T? value) validator, [String? message]) {
+  JarMixed<T> custom(String? Function(T? value, [Map<String, dynamic>? allValues]) validator, [String? message]) {
     return addValidator((value) {
       if (value == null) return null;
-      final validationResult = validator(value);
+      final validationResult = validator(value, getAllValues());
       return validationResult ?? null;
     });
   }

@@ -44,11 +44,11 @@ class JarBoolean extends JarSchema<bool, JarBoolean> {
     });
   }
 
-  JarBoolean custom(String? Function(bool? value) validator,
+  JarBoolean custom(String? Function(bool? value, [Map<String, dynamic>? allValues]) validator,
       [String? message]) {
     return addValidator((value) {
       if (value == null) return null;
-      final validationResult = validator(value);
+      final validationResult = validator(value, getAllValues());
       return validationResult ?? null;
     });
   }

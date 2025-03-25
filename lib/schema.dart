@@ -64,4 +64,8 @@ abstract class JarSchema<T, Self extends JarSchema<T, Self>> {
   T? getFieldValue(String fieldName) {
     return _allValues?[fieldName] as T?;
   }
+  
+  Map<String, dynamic>? getAllValues() {
+    return _allValues;
+  }
 }

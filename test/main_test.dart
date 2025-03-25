@@ -17,7 +17,7 @@ void main() {
 
     test('custom validation', () {
       final schema = Jar.string().custom(
-        (value) => value!.length % 2 == 0 ? null : 'String length must be even',
+        (value, [allValues]) => value!.length % 2 == 0 ? null : 'String length must be even',
       );
 
       expect(schema.validate('ab').isValid, true);

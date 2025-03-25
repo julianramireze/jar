@@ -81,11 +81,11 @@ class JarString extends JarSchema<String, JarString> {
     });
   }
 
-  JarString custom(String? Function(String? value) validator,
+  JarString custom(String? Function(String? value, [Map<String, dynamic>? allValues]) validator,
       [String? message]) {
     return addValidator((value) {
       if (value == null) return null;
-      final validationResult = validator(value);
+      final validationResult = validator(value, getAllValues());
       return validationResult ?? null;
     });
   }

@@ -117,11 +117,11 @@ class JarArray<T> extends JarSchema<List<T>, JarArray<T>> {
     });
   }
 
-  JarArray<T> custom(String? Function(List<T>? value) validator,
+  JarArray<T> custom(String? Function(List<T>? value, [Map<String, dynamic>? allValues]) validator,
       [String? message]) {
     return addValidator((value) {
       if (value == null) return null;
-      final validationResult = validator(value);
+      final validationResult = validator(value, getAllValues());
       return validationResult ?? null;
     });
   }

@@ -2,9 +2,30 @@
 
 All notable changes to the JAR validation library will be documented in this file.
 
+## 1.2.0 - [2025-03-25]
+
+### Added
+
+- Cross-field validation with access to all form values
+  - Enhanced `custom()` method to optionally accept `allValues` parameter for all schema types
+  - Added context-aware validation for dependent fields
+  - Improved propagation of values to nested schemas
+- Comprehensive test suite for cross-field validation scenarios
+  - Simple field dependency tests
+  - Multi-level field dependency tests
+  - Password confirmation validation tests
+  - Conditional required fields tests
+- Added object-level validation for complex field relationships
+
+### Changed
+
+- Updated documentation to include cross-field validation examples
+- Improved error propagation in nested schemas
+
 ## 1.1.1 - [2025-03-15]
 
 ### Fixed
+
 - Improved type validation for arrays
   - Enhanced type checking for array elements
   - Fixed edge cases in array type validation
@@ -13,6 +34,7 @@ All notable changes to the JAR validation library will be documented in this fil
 ## 1.1.0 - [2025-03-15]
 
 ### Added
+
 - Custom validation support with `.custom()` method for all schema types
   - Added to string, number, boolean, date, array, object, and mixed schemas
   - Allows for complex, context-aware validation rules
@@ -23,12 +45,14 @@ All notable changes to the JAR validation library will be documented in this fil
   - Complex conditional validation tests
 
 ### Changed
+
 - Updated documentation to include custom validation examples
 - Improved error handling for validation functions
 
 ## 1.0.0 - [2025-03-04]
 
 ### Added
+
 - Initial release of JAR validation library
 - Core schema types:
   - String validation with email, pattern matching, and transformations

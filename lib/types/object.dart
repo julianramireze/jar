@@ -271,11 +271,11 @@ class JarObject extends JarSchema<Map<String, dynamic>, JarObject> {
     return true;
   }
 
-  JarObject custom(String? Function(Map<String, dynamic>? value) validator,
+  JarObject custom(String? Function(Map<String, dynamic>? value, [Map<String, dynamic>? allValues]) validator,
       [String? message]) {
     return addValidator((value) {
       if (value == null) return null;
-      final validationResult = validator(value);
+      final validationResult = validator(value, getAllValues());
       return validationResult ?? null;
     });
   }
